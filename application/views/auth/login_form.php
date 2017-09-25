@@ -1,4 +1,3 @@
-<?php $this->load->view('public_header'); ?>    
 <?php
 $login = array(
 	'name'	=> 'login',
@@ -16,6 +15,7 @@ if ($login_by_username AND $login_by_email) {
 }
 $password = array(
 	'name'	=> 'password',
+	'type'	=> 'password',
 	'id'	=> 'password',
 	'class' => 'form-control input-lg',
 	'placeholder' => 'Password'
@@ -25,8 +25,6 @@ $remember = array(
 	'id'	=> 'remember_me',
 	'value'	=> 1,
 	'checked'	=> set_value('remember'),
-	'style' => 'margin:0;padding:0',
-	'class' => 'hidden'
 );
 $captcha = array(
 	'name'	=> 'captcha',
@@ -91,12 +89,15 @@ $captcha = array(
                 </div>
 	<?php } ?>				
 				<span class="button-checkbox">
-					<button type="button" class="btn" data-color="info">Remember Me</button>
+					<!--<button type="button" class="btn" data-color="info">Remember Me</button>-->
                     <!-- <input type="checkbox" name="remember_me" id="remember_me" checked="checked" class="hidden"> -->
-			<?php echo form_checkbox($remember); ?>
                     
+  <div class="checkbox">
+    <label><?php echo form_checkbox($remember); ?> Remember Me</label>
+	<a href="<?php echo site_url('auth/forgot_password'); ?>" class="btn btn-link pull-right">Forgot Password?</a>
+</div>         
                     
-					<a href="<?php echo site_url('auth/forgot_password'); ?>" class="btn btn-link pull-right">Forgot Password?</a>
+
 				</span>
 				<hr class="colorgraph">
 				<div class="row">

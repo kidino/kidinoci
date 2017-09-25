@@ -75,10 +75,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
+	'hostname' => 'localhost', // set to 127.0.0.1
 	'username' => 'root',
 	'password' => '',
-	'database' => 'pemurnian',
+	'database' => 'kidinoci',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

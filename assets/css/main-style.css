@@ -1,0 +1,38 @@
+.top-container {
+	margin-top: 60px;
+	
+}
+
+h1 {
+	font-size: 24px;
+}
+
+h2 {
+	font-size: 20px; font-weight: bold;
+}
+
+h3 {
+	font-size: 18px;
+}
+
+.search-field input {
+    outline: none;
+	box-shadow: none !important;
+}
+
+.flexigrid div.tDiv2 {
+	padding:1px;
+	float: none !important;
+}
+.flexigrid div.tDiv3 {
+	padding:1px;
+	float: none !important;
+}
+
+input[type=text].form-control,
+input[type=password].form-control,
+input[type=email].form-control,
+input[type=number].form-control,
+input[type=date].form-control {
+	height: 30px !important;
+}

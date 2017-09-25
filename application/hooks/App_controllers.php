@@ -13,3 +13,16 @@ function my_own_controllers($class)
     }
   }
 }
+
+
+function redirect_ssl() {
+	if (!is_secure()){
+		redirect( current_url(), 'location', 301 ); // current_url will create based on $config['base_url'] which has https://
+	}
+}
+
+function is_secure() {
+  return
+    (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+    || $_SERVER['SERVER_PORT'] == 443;
+}

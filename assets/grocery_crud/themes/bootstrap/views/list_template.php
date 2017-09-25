@@ -64,6 +64,16 @@
 
     include(__DIR__ . '/common_javascript_vars.php');
 ?>
+<style>
+	.scroll-if-required { overflow: auto; }
+	.main { width: 100%; }
+	
+	@media (max-width: 768px) {
+		.gc-container .row { display: block; background-color: #fff; }
+		.maingc { margin-left: -40px; margin-top: -40px; margin-right: -40px; }	
+	}
+</style>
+
 <script type='text/javascript'>
     var base_url = '<?php echo base_url();?>';
 
@@ -76,14 +86,17 @@
     var THEME_VERSION = '1.3.4';
 </script>
     <br/>
-    <div class="container gc-container">
+    <!-- <div class="container gc-container"> -->
+
+
+ 		<div class="container gc-container">
+       	
         <div class="success-message hidden"><?php
         if($success_message !== null){?>
            <?php echo $success_message; ?> &nbsp; &nbsp;
         <?php }
         ?></div>
-
- 		<div class="row">
+        
         	<div class="table-section">
                 <div class="table-label">
                     <div class="floatL l5">
@@ -102,12 +115,12 @@
                         <div class="header-tools">
                             <?php if(!$unset_add){?>
                                 <div class="floatL t5">
-                                    <a class="btn btn-default" href="<?php echo $add_url?>"><i class="fa fa-plus"></i> &nbsp; <?php echo $this->l('list_add'); ?> <?php echo $subject?></a>
+                                    <a class="btn btn-primary" href="<?php echo $add_url?>"><i class="fa fa-plus"></i> &nbsp; <?php echo $this->l('list_add'); ?> <?php echo $subject?></a>
                                 </div>
                             <?php } ?>
                             <div class="floatR">
                                 <?php if(!$unset_export) { ?>
-                                    <a class="btn btn-default t5 gc-export" data-url="<?php echo $export_url; ?>">
+                                    <a class="btn btn-primary t5 gc-export" data-url="<?php echo $export_url; ?>">
                                         <i class="fa fa-cloud-download floatL t3"></i>
                                         <span class="hidden-xs floatL l5">
                                             <?php echo $this->l('list_export');?>
@@ -116,7 +129,7 @@
                                     </a>
                                 <?php } ?>
                                 <?php if(!$unset_print) { ?>
-                                    <a class="btn btn-default t5 gc-print" data-url="<?php echo $print_url; ?>">
+                                    <a class="btn btn-primary t5 gc-print" data-url="<?php echo $print_url; ?>">
                                         <i class="fa fa-print floatL t3"></i>
                                         <span class="hidden-xs floatL l5">
                                             <?php echo $this->l('list_print');?>
@@ -132,7 +145,9 @@
                             </div>
                             <div class="clear"></div>
                         </div>
-        			    <table class="table table-bordered grocery-crud-table table-hover">
+                        
+                        <div class="scroll-if-required">
+        			    <table class="table table-striped grocery-crud-table table-hover">
         					<thead>
         						<tr>
         							<th colspan="2" <?php if ($buttons_counter === 0) {?>class="hidden"<?php }?>>
@@ -154,22 +169,25 @@
         							<td class="no-border-left <?php if ($buttons_counter === 0) {?>hidden<?php }?>">
                                         <div class="floatL">
                                             <a href="javascript:void(0);" title="<?php echo $this->l('list_delete')?>"
-                                               class="hidden btn btn-default delete-selected-button">
+                                               class="hidden btn btn-primary delete-selected-button">
                                                 <i class="fa fa-trash-o text-danger"></i>
                                                 <span class="text-danger"><?php echo $this->l('list_delete')?></span>
                                             </a>
                                         </div>
                                         <div class="floatR l5">
-                                            <a href="javascript:void(0);" class="btn btn-default gc-refresh">
+                                            <a href="javascript:void(0);" class="btn btn-primary gc-refresh">
                                                 <i class="fa fa-refresh"></i>
                                             </a>
                                         </div>
-                                        </div>
+                                        <!-- </div> -->
                                         <div class="clear"></div>
                                     </td>
-                                    <?php foreach($columns as $column){?>
+                                    
+                                    <?php foreach($columns as $column){ 
+										$input_name = (isset($column->input_name)) ? $column->input_name : $column->field_name;
+									?>
                                         <td>
-                                            <input type="text" class="form-control searchable-input floatL" placeholder="Search <?php echo $column->display_as; ?>" name="<?php echo $column->field_name; ?>" />
+                                            <input type="text" class="form-control searchable-input floatL" placeholder="Search <?php echo $column->display_as; ?>" name="<?php echo $input_name /*$column->field_name*/; ?>" />
                                         </td>
                                     <?php }?>
         						</tr>
@@ -179,6 +197,7 @@
                                 <?php include(__DIR__."/list_tbody.php"); ?>
         					</tbody>
                             </table>
+                            </div>
                             <!-- Table Footer -->
         					<div class="footer-tools">
 
@@ -226,7 +245,7 @@
 
                                                 <!-- Start of: Settings button -->
                                                 <div class="btn-group floatR t20 l10 settings-button-container">
-                                                    <button type="button" class="btn btn-default gc-bootstrap-dropdown settings-button dropdown-toggle">
+                                                    <button type="button" class="btn btn-primary gc-bootstrap-dropdown settings-button dropdown-toggle">
                                                         <i class="fa fa-cog r5"></i>
                                                         <span class="caret"></span>
                                                     </button>
@@ -310,5 +329,5 @@
             </div>
             <!-- End of Delete Multiple confirmation dialog -->
 
-            </div>
+            <!-- </div> container -->
         </div>

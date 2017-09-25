@@ -19,11 +19,13 @@
 
 include(__DIR__ . '/common_javascript_vars.php');
 ?>
+<style>
+	.main {width: 100%;}
+</style>
 <div class="crud-form" data-unique-hash="<?php echo $unique_hash; ?>">
-    <div class="container gc-container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="table-label">
+        <div class="row container gc-container">
+            <div class="table-section card">
+                <div class="table-label card-header">
                     <div class="floatL l5">
                         <?php echo $this->l('form_add'); ?> <?php echo $subject?>
                     </div>
@@ -35,7 +37,7 @@ include(__DIR__ . '/common_javascript_vars.php');
                     </div>
                     <div class="clear"></div>
                 </div>
-                <div class="form-container table-container">
+                <div class="form-container table-container card-block">
                         <?php echo form_open( $insert_url, 'method="post" id="crudForm"  enctype="multipart/form-data" class="form-horizontal"'); ?>
 
                             <?php foreach($fields as $field) { ?>
@@ -85,7 +87,6 @@ include(__DIR__ . '/common_javascript_vars.php');
                 </div>
             </div>
         </div>
-    </div>
 </div>
 <script>
 	var validation_url = '<?php echo $validation_url?>';

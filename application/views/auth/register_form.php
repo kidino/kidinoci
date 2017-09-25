@@ -1,5 +1,3 @@
-<?php $this->load->view('public_header'); ?>
-<div class="container-fluid top-container">
 
 <?php
 if ($use_username) {

@@ -1,4 +1,3 @@
-<?php $this->load->view('public_header'); ?>    
 <?php
 $login = array(
 	'name'	=> 'login',
@@ -33,7 +32,7 @@ if ($this->config->item('use_username', 'tank_auth')) {
                 				
 				<hr class="colorgraph">
 				<div class="row">
-					<div class="col-xs-6 col-sm-6 col-md-6">
+					<div class="col-xs-8 col-sm-6 col-md-6">
                         <input type="submit" class="btn btn-lg btn-success btn-block" value="Reset Password">
 					</div>
 				</div>
@@ -55,5 +54,3 @@ if ($this->config->item('use_username', 'tank_auth')) {
 <?php echo form_submit('reset', 'Get a new password'); ?>
 <?php echo form_close(); ?>
 -->
-
-<?php $this->load->view('footer'); ?>

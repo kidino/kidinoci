@@ -81,7 +81,14 @@ class Tank_auth
 							if ($remember) {
 								$this->create_autologin($user->id);
 							}
-
+							
+							$access = $this->get_group_access($user->groups);
+							
+							$this->ci->session->set_userdata( array(
+								'access' => $access,
+								'is_super' => $user->is_super
+							));
+							
 							$this->clear_login_attempts($login);
 
 							$this->ci->users->update_login_info(
@@ -103,6 +110,29 @@ class Tank_auth
 		return FALSE;
 	}
 
+	function get_group_access($groups){
+		$access = array();
+		
+		if (trim($groups) != '') {
+			$where_in = explode(',', $groups);
+			
+			$res = $this->ci->db->query('select a.acctype_id, b.code 
+				from user_group_access as a left join user_access_types as b
+				on a.acctype_id = b.acctype_id
+				where a.deleted_at is null and b.deleted_at is null
+				and a.group_id in ('.implode(',',$where_in).')');
+			
+			foreach($res->result_array() as $k => $v) {
+				$access[] = $v['code'];
+			}
+		}
+		
+		$access = array_keys(array_count_values($access));
+		
+		return $access;
+
+	}
+	
 	/**
 	 * Logout user from the site
 	 *
@@ -577,6 +607,13 @@ class Tank_auth
 								'expire'	=> $this->ci->config->item('autologin_cookie_life', 'tank_auth'),
 						));
 
+						$access = $this->get_group_access($user->groups);
+
+						$this->ci->session->set_userdata( array(
+							'access' => $access,
+							'is_super' => $user->is_super
+						));
+						
 						$this->ci->users->update_login_info(
 								$user->id,
 								$this->ci->config->item('login_record_ip', 'tank_auth'),

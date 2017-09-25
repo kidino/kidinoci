@@ -702,6 +702,10 @@
         });
 
         this.gcrud_container.find('.delete-selected-button').click(function () {
+			
+			setTimeout(function(){
+				$('.modal-backdrop.fade.in').remove();			
+			}, 500);			
 
             this.gcrud_container.find('.delete-multiple-confirmation').gc_modal();
             this.gcrud_container.find('.delete-multiple-confirmation').on('hidden.bs.modal', function () {
@@ -744,7 +748,8 @@
                 }.bind(this));
             }.bind(this));
 
-        }.bind(this));
+        }.bind(this));		
+
     };
 
     Datagrid.prototype.listenerDeleteRowClick = function ($delete_row_container) {
@@ -794,6 +799,11 @@
                 });
             });
 
+			
+			setTimeout(function(){
+				$('.modal-backdrop.fade.in').remove();			
+			}, 500);
+			
             datagrid_object.gcrud_container.find('.delete-confirmation').gc_modal();
             datagrid_object.gcrud_container.find('.delete-confirmation').on('hidden.bs.modal', function () {
                 datagrid_object.gcrud_container.find('.delete-confirmation-button').unbind('click');

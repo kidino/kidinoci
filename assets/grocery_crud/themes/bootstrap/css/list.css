@@ -82,10 +82,10 @@
   margin-bottom: 0px;
 }
 .gc-container span.page-number-input-container {
-  padding: 4px 10px !important;
+  /* padding: 4px 10px !important; */
 }
 .gc-container span.page-number-input-container .page-number-input {
-  height: 24px !important;
+  height: 35px !important;
   width: 50px !important;
   padding: 2px 3px !important;
 }

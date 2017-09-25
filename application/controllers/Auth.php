@@ -8,13 +8,13 @@ class Auth extends Public_Controller
 
 		$this->load->helper(array('form', 'url'));
 		$this->load->library('form_validation');
-		//$this->load->library('security');
+		
 	}
 
 	function index()
 	{
 		if ($message = $this->session->flashdata('message')) {
-			$this->load->view('auth/general_message', array('message' => $message));
+			$this->auth_view('auth/general_message', array('message' => $message));
 		} else {
 			redirect('/auth/login/');
 		}
@@ -91,7 +91,7 @@ class Auth extends Public_Controller
 					$data['captcha_html'] = $this->_create_captcha();
 				}
 			}
-			$this->load->view('auth/login_form', $data);
+			$this->auth_view('auth/login_form', $data);
 		}
 	}
 
@@ -190,7 +190,7 @@ class Auth extends Public_Controller
 			$data['use_username'] = $use_username;
 			$data['captcha_registration'] = $captcha_registration;
 			$data['use_recaptcha'] = $use_recaptcha;
-			$this->load->view('auth/register_form', $data);
+			$this->auth_view('auth/register_form', $data);
 		}
 	}
 
@@ -225,7 +225,7 @@ class Auth extends Public_Controller
 					foreach ($errors as $k => $v)	$data['errors'][$k] = $this->lang->line($v);
 				}
 			}
-			$this->load->view('auth/send_again_form', $data);
+			$this->auth_view('auth/send_again_form', $data);
 		}
 	}
 
@@ -287,7 +287,7 @@ class Auth extends Public_Controller
 			}
 			
 			$data['errors'] = array_merge($data['errors'], $this->form_validation->error_array());
-			$this->load->view('auth/forgot_password_form', $data);
+			$this->auth_view('auth/forgot_password_form', $data);
 		}
 	}
 
@@ -333,7 +333,7 @@ class Auth extends Public_Controller
 				$this->_show_message($this->lang->line('auth_message_new_password_failed'));
 			}
 		}
-		$this->load->view('auth/reset_password_form', $data);
+		$this->auth_view('auth/reset_password_form', $data);
 	}
 
 	/**
@@ -364,7 +364,7 @@ class Auth extends Public_Controller
 					foreach ($errors as $k => $v)	$data['errors'][$k] = $this->lang->line($v);
 				}
 			}
-			$this->load->view('auth/change_password_form', $data);
+			$this->auth_view('auth/change_password_form', $data);
 		}
 	}
 
@@ -401,7 +401,7 @@ class Auth extends Public_Controller
 					foreach ($errors as $k => $v)	$data['errors'][$k] = $this->lang->line($v);
 				}
 			}
-			$this->load->view('auth/change_email_form', $data);
+			$this->auth_view('auth/change_email_form', $data);
 		}
 	}
 
@@ -452,7 +452,7 @@ class Auth extends Public_Controller
 					foreach ($errors as $k => $v)	$data['errors'][$k] = $this->lang->line($v);
 				}
 			}
-			$this->load->view('auth/unregister_form', $data);
+			$this->auth_view('auth/unregister_form', $data);
 		}
 	}
 
@@ -478,6 +478,49 @@ class Auth extends Public_Controller
 	 */
 	function _send_email($type, $email, &$data)
 	{
+
+		$this->load->library('AppSettings','appsettings');
+
+		$config = array(
+				'useragent' => $this->appsettings->get('email_useragent'),
+				'protocol' => $this->appsettings->get('email_method'),
+				'smtp_host' => $this->appsettings->get('smtp_host'),
+				'smtp_port' => $this->appsettings->get('smtp_port'),
+				'smtp_user' => $this->appsettings->get('smtp_username'),
+				'smtp_pass' => $this->appsettings->get('smtp_password'),
+				'smtp_cryto'=> $this->appsettings->get('smtp_connection'),
+				'smtp_debug'=> $this->appsettings->get('smtp_debug'),
+				'smtp_timeout' => 30, // (in seconds)
+				'mailtype'  => 'html', 
+				'charset'   => 'utf-8',
+				'crlf'   => "\r\n",
+				'newline'   => "\r\n"
+			);
+		
+		$this->load->library('email', $config);
+		$this->email->set_newline("\r\n");  
+
+		$this->email->from(
+			$this->appsettings->get('email_from_email'), 
+			$this->appsettings->get('email_from_name')
+			);
+		$this->email->reply_to(
+			$this->appsettings->get('email_from_email'), 
+			$this->appsettings->get('email_from_name')
+			);
+		$this->email->to($email);
+		$this->email->subject(
+			sprintf($this->lang->line('auth_subject_'.$type), 
+				$this->appsettings->get('website_name'))
+			);
+		$this->email->message(
+			$this->load->view('email/'.$type.'-html', array_merge($this->data, $data), TRUE));
+		$this->email->set_alt_message(
+			$this->load->view('email/'.$type.'-txt', array_merge($this->data, $data), TRUE));
+		
+			$this->email->send();
+		
+/*
 		$this->load->library('email');
 		$this->email->from($this->config->item('webmaster_email', 'tank_auth'), $this->config->item('website_name', 'tank_auth'));
 		$this->email->reply_to($this->config->item('webmaster_email', 'tank_auth'), $this->config->item('website_name', 'tank_auth'));
@@ -486,6 +529,7 @@ class Auth extends Public_Controller
 		$this->email->message($this->load->view('email/'.$type.'-html', $data, TRUE));
 		$this->email->set_alt_message($this->load->view('email/'.$type.'-txt', $data, TRUE));
 		$this->email->send();
+*/
 	}
 
 	/**
@@ -582,6 +626,11 @@ class Auth extends Public_Controller
 			return FALSE;
 		}
 		return TRUE;
+	}
+	
+	private function auth_view($content_view, $data){
+		$data = array_merge($this->data, $data, array('content_view' => $content_view));
+		$this->load->view('auth/auth_view', $data);
 	}
 
 }

@@ -49,7 +49,38 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller'] = 'welcome';
+$route['default_controller'] = 'dashboard';
+$route['users'] = 'usersp';
+$route['users/index'] = 'usersp/index';
+$route['users/index/(:any)'] = 'usersp/index/$1';
+$route['users/index/(:any)/(:any)'] = 'usersp/index/$1/$2';
+$route['users/index/(:any)/(:any)/(:any)'] = 'usersp/index/$1/$2/$3';
+$route['users/index/(:any)/(:any)/(:any)/(:any)'] = 'usersp/index/$1/$2/$3/$4';
+
+$route['users/groups'] = 'usersp/groups';
+$route['users/groups/(:any)'] = 'usersp/groups/$1';
+$route['users/groups/(:any)/(:any)'] = 'usersp/groups/$1/$2';
+$route['users/groups/(:any)/(:any)/(:any)'] = 'usersp/groups/$1/$2/$3';
+$route['users/groups/(:any)/(:any)/(:any)/(:any)'] = 'usersp/groups/$1/$2/$3/$4';
+
+$route['users/user_profile'] = 'usersp/user_profile';
+$route['users/user_profile/(:any)'] = 'usersp/user_profile/$1';
+$route['users/user_profile/(:any)/(:any)'] = 'usersp/user_profile/$1/$2';
+$route['users/user_profile/(:any)/(:any)/(:any)'] = 'usersp/user_profile/$1/$2/$3';
+$route['users/user_profile/(:any)/(:any)/(:any)/(:any)'] = 'usersp/user_profile/$1/$2/$3/$4';
+
+$route['users/access_types'] = 'usersp/access_types';
+$route['users/access_types/(:any)'] = 'usersp/access_types/$1';
+$route['users/access_types/(:any)/(:any)'] = 'usersp/access_types/$1/$2';
+$route['users/access_types/(:any)/(:any)/(:any)'] = 'usersp/access_types/$1/$2/$3';
+$route['users/access_types/(:any)/(:any)/(:any)/(:any)'] = 'usersp/access_types/$1/$2/$3/$4';
+
+$route['users/group_access'] = 'usersp/group_access';
+$route['users/group_access/(:any)'] = 'usersp/group_access/$1';
+$route['users/group_access/(:any)/(:any)'] = 'usersp/group_access/$1/$2';
+$route['users/group_access/(:any)/(:any)/(:any)'] = 'usersp/group_access/$1/$2/$3';
+$route['users/group_access/(:any)/(:any)/(:any)/(:any)'] = 'usersp/group_access/$1/$2/$3/$4';
+
 $route['404_override'] = '';
 $route['template/(:any)'] = 'template/t/$1';
 $route['translate_uri_dashes'] = FALSE;

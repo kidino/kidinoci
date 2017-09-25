@@ -391,10 +391,10 @@ class MY_Model extends CI_Model
         // if the array is not a multidimensional one...
         if($multi === FALSE)
         {
-            if($this->timestamps !== FALSE)
-            {
-                $data[$this->_created_at_field] = $this->_the_timestamp();
-            }
+            // if($this->timestamps !== FALSE)
+            // {
+            //     $data[$this->_created_at_field] = $this->_the_timestamp();
+            // }
             $data = $this->trigger('before_create',$data);
             if($this->_database->insert($this->table, $data))
             {
@@ -929,6 +929,20 @@ class MY_Model extends CI_Model
             }
         }
     }
+	
+	
+	function get_column($col){
+		$this->fields($col);
+		$d = $this->get_all();
+		if ($d) {
+			$e = array();
+			foreach($d as $v){
+				$e[] = $v[$col];
+			}
+			return $e;
+		}
+		return false;
+	}
 
     /**
      * public function count()
@@ -1160,11 +1174,16 @@ class MY_Model extends CI_Model
                     {
                         
                         $mlocal_key = isset($result_array[ singular($this->table) . '_' . $local_key]) ? singular($this->table) . '_' . $local_key : $local_key;
-                            
-                        $the_local_key = $result_array[ $mlocal_key];
+                        if (isset($pivot_local_key)) {
+							$the_local_key = $result_array[ $pivot_local_key];
+						} else {
+                        	$the_local_key = $result_array[ $mlocal_key];
+						}
+						
+						//print_r($result_array);
                         if(isset($get_relate) and $get_relate === TRUE)
                         {
-                            $subs[$the_local_key][$the_foreign_key] = $this->{$relation['foreign_model']}->where($local_key, $result[$local_key])->get();
+                            $subs[$the_local_key][$the_foreign_key] = @$this->{$relation['foreign_model']}->where($the_foreign_key, $result[$the_foreign_key])->get();
                         }
                         else
                         {
@@ -1669,7 +1688,7 @@ class MY_Model extends CI_Model
                     unset($uri_array[$segments]);
                     $uri_string = implode('/', $uri_array);
                     $links .= $this->pagination_delimiters[0];
-                    $links .= (($page_number == $i) ? anchor($uri_string, $i) : anchor($uri_string . '/' . $i, $i));
+                    $links .= (($page_number == $i) ? anchor('#', $i,'class="active"') : anchor($uri_string . '/' . $i, $i));
                     $links .= $this->pagination_delimiters[1];
                 }
                 $links .= $this->next_page;
