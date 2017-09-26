@@ -2,7 +2,7 @@
 
 <div class="row">
 	<div class="col-md-12">
-	<h1><?php echo $page_title?></h1>
+	<h1><?php echo str_replace($appname.' - ','',$page_title);?></h1>
 	
 	<?php if(isset($gc_tab)) { ?>
 	<?php $this->load->view($gc_tab);?>

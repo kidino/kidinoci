@@ -26,9 +26,9 @@ class Loggedin_Controller extends MY_Controller {
 		}
 		
 		if (!isset($this->data['page_title'])) {
-			$this->data['page_title'] = 'Armada Timesheet';
+			$this->data['page_title'] = $this->data['appname'];
 		} else {
-			$this->data['page_title'] = 'Armada Timesheet - '.$this->data['page_title'];
+			$this->data['page_title'] =  $this->data['appname'].' - '.$this->data['page_title'];
 		}		
 	}
 	

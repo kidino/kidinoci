@@ -50,6 +50,8 @@ class Usersp extends Loggedin_Controller
 		$this->before_insert_funcs[] = 'update_user_created';
 		$this->before_update_funcs[] = 'update_user_modified';
 		
+		$this->data['page_title'] = 'Users';
+		
 		$this->_gc_view();
 		
 	}

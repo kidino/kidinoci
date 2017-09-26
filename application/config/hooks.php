@@ -20,12 +20,3 @@ $hook['pre_system'][] = array(
   'filepath' => 'hooks'
 );
 
-if ($_SERVER['SERVER_NAME'] == 'armada-timesheet.coders.my') {
-	$hook['post_controller_constructor'][] = array(
-	  'class' => '',
-	  'function' => 'redirect_ssl',
-	  'filename' => 'App_controllers.php',
-	  'filepath' => 'hooks'
-	);	
-}
-
