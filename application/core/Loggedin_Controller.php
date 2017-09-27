@@ -76,8 +76,8 @@ class Loggedin_Controller extends MY_Controller {
 		
 		if($this->_field_exists($this->data['the_table'], 'deleted_at') ) {
 			return $this->db->update($this->data['the_table'],array('deleted_at' => date('Y-m-d H:i:s')),array($this->gc->get_primary_key() => $primary_key));
-		}
-		return true;
+		} 
+		return $this->db->delete($this->data['the_table'],array($this->gc->get_primary_key() => $primary_key));
 	}
 	
 	function before_update_callback($post_array, $primary_key) {

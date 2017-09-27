@@ -3559,6 +3559,9 @@ class Grocery_CRUD extends grocery_CRUD_States
 	protected $default_config_path		= 'assets/grocery_crud/config';
 	protected $default_assets_path		= 'assets/grocery_crud';
 
+	// Kidino's CI modification -- soft delete flag for MY_Model
+	protected $soft_delete				= false;
+	
 	/**
 	 *
 	 * Constructor
@@ -4962,6 +4965,35 @@ class Grocery_CRUD extends grocery_CRUD_States
 
 	/**
 	 *
+	 * Kidino CI's modification -- get the table name directly from $this->basic_db_table
+	 * @return string
+	 */	
+	function get_table_name() {
+		return $this->basic_db_table;
+	}
+	
+	/**
+	 *
+	 * Kidino CI's modification -- set soft delete for MY_Model support
+	 */	
+	function set_soft_delete($soft_delete) {
+		if ($soft_delete) {
+			$this->soft_delete = true;
+		} else {
+			$this->soft_delete = false;
+		}
+	}
+	
+	/**
+	 *
+	 * Kidino CI's modification -- get soft delete for MY_Model support
+	 */	
+	function get_soft_delete(){
+		return $this->soft_delete;
+	}
+	
+	/**
+	 *
 	 * Gets the basic database table of our crud.
 	 * @return string
 	 */
@@ -5057,10 +5089,6 @@ class Grocery_CRUD extends grocery_CRUD_States
 		}
 
 		return $this;
-	}
-	
-	function get_table_name() {
-		return $this->basic_db_table;
 	}
 
 	/**
