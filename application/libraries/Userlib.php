@@ -38,7 +38,7 @@ class Userlib {
 		}
 		
 		if (!$this->ci->data['user_profile']) {
-			$profile_id = $this->ci->_create_user_profile($this->ci->data['user']['id']);
+			$profile_id = $this->_create_user_profile($this->ci->data['user']['id']);
 			$this->ci->data['user_profile'] = $this->ci->m_user_profiles->get($profile_id);
 		}
 	}

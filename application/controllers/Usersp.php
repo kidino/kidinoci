@@ -22,6 +22,16 @@ class Usersp extends Loggedin_Controller
 		$this->gc->set_subject('User', 'Users');
 		$this->gc->columns('email','username', 'activated','banned','last_login','created','modified');
 		
+		$this->gc->set_rules('email', 'Email', 'trim|required|valid_email');
+		
+		if ($this->uri->segment(3) == 'add') {		
+			$this->gc->set_rules('cpassword', 'Password', 'required|trim|min_length['.$this->config->item('password_min_length', 'tank_auth').']|max_length['.$this->config->item('password_max_length', 'tank_auth').']|alpha_dash');
+			$this->gc->set_rules('username', 'Username', 'trim|required|min_length['.$this->config->item('username_min_length', 'tank_auth').']|max_length['.$this->config->item('username_max_length', 'tank_auth').']|alpha_dash');
+		} else {
+			$this->gc->set_rules('cpassword', 'Password', 'trim|min_length['.$this->config->item('password_min_length', 'tank_auth').']|max_length['.$this->config->item('password_max_length', 'tank_auth').']|alpha_dash');
+			$this->gc->set_rules('username', 'Username', 'trim|required|min_length['.$this->config->item('username_min_length', 'tank_auth').']|max_length['.$this->config->item('username_max_length', 'tank_auth').']|alpha_dash');
+		}
+		
 		if ($this->uri->segment(3) == 'edit') {
 			$this->userlib->_user_tab('user');
 		}		
@@ -38,8 +48,8 @@ class Usersp extends Loggedin_Controller
 
 		
 		$this->gc->field_type('groups','multiselect',$groups);
-		$this->gc->edit_fields('email','username', 'fullname','activated','banned','cpassword','is_super','groups','banned','ban_reason','last_ip','last_login','created','modified', 'created_at','updated_at','password');
-		$this->gc->add_fields('email','username', 'fullname','activated','banned','cpassword','is_super','groups','banned','ban_reason','last_ip','last_login','created','modified', 'created_at','updated_at','password');
+		$this->gc->edit_fields('email','username', 'fullname','activated','banned','cpassword','is_super','groups','banned','ban_reason','last_ip','last_login','password');
+		$this->gc->add_fields('email','username', 'fullname','activated','banned','cpassword','is_super','groups','banned','ban_reason','last_ip','last_login','password');
 		
 		$this->hide_fields[] = 'password';
 		
@@ -67,7 +77,6 @@ class Usersp extends Loggedin_Controller
 		
 		unset($post_array['cpassword']);
 
-		$post_array['created'] = $post_array['created_at'] = $post_array['updated_at'] = date('Y-m-d H:i:s');
 		return $post_array;
 	}
 	
@@ -120,7 +129,7 @@ class Usersp extends Loggedin_Controller
 		$this->load->model('m_user_access_types');
 		
 		$this->data['user_group'] = $this->m_user_groups->get($group_id);
-		$this->data['user_access_types'] = $this->m_user_access_types->get_all();
+		$this->data['user_access_types'] = $this->m_user_access_types->order_by('code','asc')->get_all();
 		$this->data['user_group_access'] = $this->m_user_group_access->where(array('group_id' => $group_id))->get_all();
 		
 		$this->data['access_ids'] = array();
@@ -177,26 +186,45 @@ class Usersp extends Loggedin_Controller
 		if (!check_access('admin_users')) {
 			redirect('dashboard/invalid');
 		}
-		
+				
 		if ($this->uri->segment(3) == '') {
-			redirect('users');
+			redirect('profile');
 		}
 		
-		$this->data['page_title'] = 'Users';
+		$this->data['page_title'] = 'Profile';
 		$this->load->library('grocery_CRUD',null,'gc');
 		
 		$this->gc->set_table('user_profiles');
 		$this->gc->set_subject('User', 'Users');
 		$this->gc->unset_edit_fields('user_id');
 		$this->gc->unset_add_fields('user_id');
-		
 		$this->gc->unset_list();
+		$this->gc->unset_add();
+		$this->gc->unset_back_to_list();
+		
+		$this->gc->set_field_upload('photo','assets/avatar',"jpg|png|gif");
 
+		$this->gc->callback_after_upload(array($this,'resize_avatar_photo'));
+		
 		if ($this->uri->segment(3) == 'edit') {
 			$this->userlib->_user_tab('profile');
 		}		
 
 		$this->_gc_view();
+
 	}
+	
+	function resize_avatar_photo($uploader_response,$field_info, $files_to_upload) {
+		$this->load->library('image_moo');
+
+		//Is only one file uploaded so it ok to use it with $uploader_response[0].
+		$file_uploaded = $field_info->upload_path.'/'.$uploader_response[0]->name; 
+
+		$this->image_moo->load($file_uploaded)
+							    ->resize_crop(200,200)		
+							    ->save($file_uploaded, true);
+			
+	}
+
 	
 }

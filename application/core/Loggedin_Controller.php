@@ -68,9 +68,20 @@ class Loggedin_Controller extends MY_Controller {
 		$this->gc->callback_before_insert(array($this,'before_insert_callback'));
 		$this->gc->callback_after_insert(array($this, 'after_insert_callback'));
 		
+		$this->gc->callback_delete(array($this,'gc_soft_delete'));
+
+		
 		$output = $this->gc->render();
 		$this->data = array_merge($this->data, (array)$output);
 		$this->load->view('gc', $this->data);
+	}
+	
+	function gc_soft_delete($primary_key){
+		
+		if($this->_field_exists($this->data['the_table'], 'deleted_at') ) {
+			return $this->db->update($this->data['the_table'],array('deleted_at' => date('Y-m-d H:i:s')),array($this->gc->get_primary_key() => $primary_key));
+		}
+		return true;
 	}
 	
 	function before_update_callback($post_array, $primary_key) {
@@ -78,6 +89,14 @@ class Loggedin_Controller extends MY_Controller {
 			if (method_exists($this, $func)){
 				$post_array = $this->{$func}($post_array, $primary_key);
 			} 
+		}
+		
+		if($this->_field_exists($this->data['the_table'],'updated_at')) {
+			$post_array['updated_at'] = date('Y-m-d H:i:s');
+		}
+		
+		if($this->_field_exists($this->data['the_table'],'modified')) {
+			$post_array['updated_at'] = date('Y-m-d H:i:s');
 		}
 		
 		return $post_array;
@@ -98,7 +117,15 @@ class Loggedin_Controller extends MY_Controller {
 				$post_array = $this->{$func}($post_array, $primary_key);
 			} 
 		}
-				
+		
+		if($this->_field_exists($this->data['the_table'],'created_at')) {
+			$post_array['created_at'] = date('Y-m-d H:i:s');
+		}
+		
+		if($this->_field_exists($this->data['the_table'],'created')) {
+			$post_array['created_at'] = date('Y-m-d H:i:s');
+		}
+		
 		return $post_array;
 	}
 
@@ -122,13 +149,8 @@ class Loggedin_Controller extends MY_Controller {
 	
 	function hide_fields() {
 		
-		$hide_fields = array_merge($this->hide_fields, array(
-			'deleted_at','created_at','createdDate','modifiedDate','createdBy',
-			'updated_at','modifiedBy','hits','viewCount','ifcategorycode2',
-			'ifcategorycode3','ifcategorycode4','ifcategorycode5','ifcategorycode6',
-			'ifcategorycode7','ifcategorycode8','ifcategorycode9','ifcategorycode10',
-			'ifcategoryCode','views','hits','viewCount','ifcategoryId'
-		));
+		$hide_fields = array_merge($this->hide_fields,
+			array('deleted_at','created_at','created','deleted_at','modified','updated_at'));
 
 		foreach($hide_fields as $f){
 			//if ($this->_field_exists($this->data['the_table'], $f)) {

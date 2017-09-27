@@ -12,7 +12,8 @@ class Profile extends Loggedin_Controller
 	}
 
 	function index() {
-		if ($this->tank_auth->get_user_id() != $this->uri->segment(4)) {
+		if ($this->tank_auth->get_user_id() != $this->uri->segment(4))
+		{
 			redirect('profile/index/edit/'.$this->tank_auth->get_user_id());
 		}
 		
@@ -48,15 +49,14 @@ class Profile extends Loggedin_Controller
 		
 		$this->gc->unique_fields(array('email','username'));
 			
-		$this->before_insert_funcs[] = 'update_user_created';
-		$this->before_update_funcs[] = 'update_user_modified';
-		
 		$this->_gc_view();
 	}
 	
 	function user_profile() {
 		
-		if ($this->tank_auth->get_user_id() != $this->uri->segment(4)) {
+		if (($this->tank_auth->get_user_id() != $this->uri->segment(4))
+		&& ($this->uri->segment(3) != 'upload_file')) // allow for photo upload
+		{
 			redirect('profile/index/edit/'.$this->tank_auth->get_user_id());
 		}
 		
@@ -75,11 +75,27 @@ class Profile extends Loggedin_Controller
 		$this->gc->unset_add();
 		$this->gc->unset_back_to_list();
 		
+		$this->gc->set_field_upload('photo','assets/avatar',"jpg|png|gif");
+
+		$this->gc->callback_after_upload(array($this,'resize_avatar_photo'));
+		
 		if ($this->uri->segment(3) == 'edit') {
 			$this->userlib->_user_tab('profile','profile_tab');
 		}		
 
 		$this->_gc_view();
+	}
+	
+	function resize_avatar_photo($uploader_response,$field_info, $files_to_upload) {
+		$this->load->library('image_moo');
+
+		//Is only one file uploaded so it ok to use it with $uploader_response[0].
+		$file_uploaded = $field_info->upload_path.'/'.$uploader_response[0]->name; 
+
+		$this->image_moo->load($file_uploaded)
+							    ->resize_crop(200,200)		
+							    ->save($file_uploaded, true);
+			
 	}
 	
 	function password() {
