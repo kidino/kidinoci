@@ -27,7 +27,7 @@ class Contacts extends Loggedin_Controller
 		
 		$this->before_insert_funcs[] = 'contacts_user_id';
 		
-		$this->gc->set_field_upload('photo','assets/avatar',"jpg|png|gif");
+		$this->gc->set_field_upload('photo','assets/contacts',"jpg|png|gif");
 
 		$this->gc->callback_after_upload(array($this,'resize_contact_photo'));		
 		
