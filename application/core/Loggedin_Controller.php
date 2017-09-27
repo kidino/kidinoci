@@ -42,10 +42,6 @@ class Loggedin_Controller extends MY_Controller {
 	
 	protected function _gc_view() {
 		
-		//$this->gc->set_theme('datatables');
-		//$this->gc->unset_jquery();
-		//$this->gc->unset_bootstrap();
-		
 		$this->base_data();
 
 		$this->data['the_table'] = $this->gc->get_table_name();
@@ -123,7 +119,7 @@ class Loggedin_Controller extends MY_Controller {
 		}
 		
 		if($this->_field_exists($this->data['the_table'],'created')) {
-			$post_array['created_at'] = date('Y-m-d H:i:s');
+			$post_array['created'] = date('Y-m-d H:i:s');
 		}
 		
 		return $post_array;
