@@ -56,8 +56,6 @@ class Loggedin_Controller extends MY_Controller {
 			$this->gc->unset_columns($this->unset_columns);
 		}
 
-		//$this->gc->callback_before_upload(array($this,'before_upload_callback'));
-
 		$this->gc->callback_before_update(array($this,'before_update_callback'));
 		$this->gc->callback_after_update(array($this,'after_update_callback'));
 		
@@ -138,9 +136,31 @@ class Loggedin_Controller extends MY_Controller {
 /*=== GROCERY CRUD HELPER FUNCTIONS ===*/	
 	
 	function _field_exists( $tablename, $colname ){
-		$res = $this->db->query("SHOW COLUMNS FROM $tablename LIKE '$colname'");
-		$r = $res->num_rows();
-		return ($r > 0);
+		
+/*
+		Column and table structure doesn't change often, so we cache the result
+		for faster access next time. If you just modified a table by adding or
+		removing columns (ie to support soft delete), then you may want to delete
+		the cache associate with it which is <table name>_<column name>.
+		
+		You can call the URL:
+		http://your_ci_installation/settings/delete_cache/<cache name>
+		
+		You have to be logged in and have super access to do this.
+*/
+
+		$this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
+		$colcache = $tablename.'_'.$colname;
+
+		if ( !$column_exists = $this->cache->get($colcache))
+		{
+			$res = $this->db->query("SHOW COLUMNS FROM $tablename LIKE '$colname'");
+			$column_exists = ($res->num_rows() > 0);
+			// Save into the cache for 1 year, 31557600 secs in a year
+			$this->cache->save($colcache, $column_exists, 31557600 );
+		}
+		
+		return ($column_exists);
 	}
 	
 	function hide_fields() {
@@ -155,7 +175,7 @@ class Loggedin_Controller extends MY_Controller {
 			//}
 		}
 	}
-
+	
 }
 
 

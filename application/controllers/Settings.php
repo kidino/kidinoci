@@ -48,5 +48,12 @@ class Settings extends Loggedin_Controller
 		redirect($return_uri);
 	}
 	
-
+	function delete_cache() {
+		// requires super access
+		if(!is_super()){ redirect('dashboard/invalid'); }
+		$this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));		
+		$this->cache->delete($this->uri->segment(3));
+		$this->_load_view('cache_deleted');
+	}
+	
 }

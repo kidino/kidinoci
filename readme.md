@@ -1,6 +1,6 @@
 # Kidino's Codeigniter Base Project
 
-This is complete rewrite (with the same core libraries) of KidinoCI. I have a bit of experience building other projects and I am combining those experience in this setup.
+This is complete rewrite of my previous KidinoCI, though with the same third-party libraries.
 
 This is my personal base for starting a Codeigniter project. It is still a work-in-progress. You are free to use and propose changes.
 
@@ -36,7 +36,7 @@ Basically there are two types of users
 
 You can edit a user and activate ```is_super``` to grant full access to the system to a user.
 
-For other users that do not have the ```is_super``` privilege, then can be controlled by the **Access Type**, **Groups** and assigning **Groups** to the users.
+For other users that do not have the ```is_super``` privilege, they can be controlled with **Access Type**, **Groups** and by assigning **Groups** to the users.
 
 You can also create your own **Access Type** to be used with your own codes.
 
@@ -88,7 +88,14 @@ https://github.com/avenirer/CodeIgniter-MY_Model
 
 GroceryCRUD makes building a CRUD system quick and easy with Codeigniter. 
 
-The Loggedin_Controller loads the GroceryCRUD library and functionalities, and contains some codes that extends the capabilities of GroceryCRUD. Basically, if you want to use GroceryCRUD, it is recommended that your controller extends the Loggedin_Controller.
+The Loggedin_Controller contains a lot of the modification to make GroceryCRUD works well with KidinoCI. However, it is not preloaded. You still have to load GroceryCRUD when you want to use them. You can do that with this code. 
+
+```
+	$this->load->library('grocery_CRUD',null,'gc');
+	$this->gc->set_table('user_groups');
+```
+
+Basically, if you want to use GroceryCRUD, it is recommended that your controller extends the Loggedin_Controller.
 
 GroceryCRUD is capabile of displaying data using Datatables and Flexgrid. But my experience is that it works best with Flexgrid.
 
@@ -103,6 +110,6 @@ Each user of the system will have their own set of contacts.
 
 # The action is in the codes
 
-Final works, thank you for checking this out. I welcome your feedbacks.
+Final words, thank you for checking this out. I welcome your feedbacks.
 
 Also, do check the codes because that is where the action is. ```application/core/Loggedin_Controller.php``` has a lot going on to integrate GroceryCRUD into KidinoCI. Apart from the ```application/controllers/Contacts.php```, ```application/controllers/Usersp.php``` also contains a lot of examples on how to use Loggedin_Controller.php.
