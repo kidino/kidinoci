@@ -85,7 +85,8 @@ class Tank_auth
 							$access = $this->get_group_access($user->groups);
 							
 							$this->ci->session->set_userdata( array(
-								'access' => $access,
+								'access' => $access['access'],
+								'groups' => $access['groups'],
 								'is_super' => $user->is_super
 							));
 							
@@ -110,26 +111,32 @@ class Tank_auth
 		return FALSE;
 	}
 
-	function get_group_access($groups){
+	function get_group_access($where_groups){
 		$access = array();
+		$groups = array();
 		
-		if (trim($groups) != '') {
-			$where_in = explode(',', $groups);
+		if (trim($where_groups) != '') {
+			$where_in = explode(',', $where_groups);
 			
-			$res = $this->ci->db->query('select a.acctype_id, b.code 
-				from user_group_access as a left join user_access_types as b
+			$res = $this->ci->db->query('select a.acctype_id, b.code, c.code as gcode
+				from user_group_access as a 
+				left join user_access_types as b
 				on a.acctype_id = b.acctype_id
-				where a.deleted_at is null and b.deleted_at is null
+				left join user_groups as c
+				on a.group_id = c.group_id
+				where a.deleted_at is null and b.deleted_at is null and c.deleted_at is null
 				and a.group_id in ('.implode(',',$where_in).')');
 			
 			foreach($res->result_array() as $k => $v) {
 				$access[] = $v['code'];
+				$groups[] = $v['gcode'];
 			}
 		}
 		
 		$access = array_keys(array_count_values($access));
+		$groups = array_keys(array_count_values($groups));
 		
-		return $access;
+		return array('access' => $access, 'groups' => $groups);
 
 	}
 	
@@ -610,7 +617,8 @@ class Tank_auth
 						$access = $this->get_group_access($user->groups);
 
 						$this->ci->session->set_userdata( array(
-							'access' => $access,
+							'access' => $access['access'],
+							'groups' => $access['groups'],
 							'is_super' => $user->is_super
 						));
 						

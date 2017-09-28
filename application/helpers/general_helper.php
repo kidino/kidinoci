@@ -27,3 +27,12 @@ function check_access($access) {
 function is_super(){
 	return ($_SESSION['is_super'] == 1);
 }
+
+function check_group($group) {
+	if (!isset($_SESSION['groups']) 
+		|| !is_array($_SESSION['groups'])
+		|| !in_array($group, $_SESSION['groups'])) {
+		return false;
+	}
+	return true;
+}

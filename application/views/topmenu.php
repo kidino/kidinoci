@@ -33,7 +33,7 @@
                 <li class="dropdown-header">User Management</li>
                 <li><a href="<?php echo site_url('users');?>">Users</a></li>
                 <li><a href="<?php echo site_url('users/groups');?>">Groups</a></li>
-                <?php if (is_super() || check_access('admin_access_types')) { ?><li><a href="<?php echo site_url('users/access_types');?>">Access Type</a></li><?php } ?>
+                <?php if (check_access('admin_access_types')) { ?><li><a href="<?php echo site_url('users/access_types');?>">Access Type</a></li><?php } ?>
               </ul>
             </li>
             
