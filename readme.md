@@ -1,3 +1,5 @@
+![KidinoCI](http://iszuddinismail.com/wp-content/uploads/2017/09/kidinoci.png "Contacts module in KidinoCI")
+
 # Kidino's Codeigniter Base Project
 
 This is complete rewrite of my previous KidinoCI, though with the same third-party libraries.
