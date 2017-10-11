@@ -108,7 +108,7 @@ class Loggedin_Controller extends MY_Controller {
 	function before_insert_callback($post_array) {
 		foreach($this->before_insert_funcs as $func) {
 			if (method_exists($this, $func)){
-				$post_array = $this->{$func}($post_array, $primary_key);
+				$post_array = $this->{$func}($post_array);
 			} 
 		}
 		

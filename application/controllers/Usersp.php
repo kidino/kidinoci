@@ -48,8 +48,8 @@ class Usersp extends Loggedin_Controller
 
 		
 		$this->gc->field_type('groups','multiselect',$groups);
-		$this->gc->edit_fields('email','username', 'fullname','activated','banned','cpassword','is_super','groups','banned','ban_reason','last_ip','last_login','password');
-		$this->gc->add_fields('email','username', 'fullname','activated','banned','cpassword','is_super','groups','banned','ban_reason','last_ip','last_login','password');
+		$this->gc->edit_fields('email','username', 'fullname','activated','cpassword','is_super','groups','banned','ban_reason','last_ip','last_login','password');
+		$this->gc->add_fields('email','username', 'fullname','activated','cpassword','is_super','groups','banned','ban_reason','last_ip','last_login','password');
 		
 		$this->hide_fields[] = 'password';
 		
@@ -70,8 +70,8 @@ class Usersp extends Loggedin_Controller
 		
 		if ($post_array['cpassword'] != '') {
 			$hasher = new PasswordHash(
-					$this->ci->config->item('phpass_hash_strength', 'tank_auth'),
-					$this->ci->config->item('phpass_hash_portable', 'tank_auth'));
+					$this->config->item('phpass_hash_strength', 'tank_auth'),
+					$this->config->item('phpass_hash_portable', 'tank_auth'));
 			$post_array['password'] = $hasher->HashPassword($post_array['cpassword']);
 		}
 		
